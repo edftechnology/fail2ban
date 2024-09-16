@@ -169,6 +169,49 @@
 # - Para desbanir um IP, use `sudo fail2ban-client set <nome-da-prisao> unbanip <endereço-ip>`.
 # 
 
+# ### Configurar o `Fail2Ban` para banir todos os OPs, exceto o seu
+# 
+# 1. **Identifique o seu IP**:
+# 
+#     - Antes de fazer qualquer alteração, certifique-se de que você conhece o seu endereço IP. Você pode encontrar o seu IP com o comando: `ip a`
+# 
+#     - Ou, se você está atrás de um roteador e deseja banir os IPs externos (da internet), use: `curl ifconfig.me`
+# 
+#     Anote o IP que você deseja "ignorar" no banimento.
+# 
+# 2. **Edite o arquivo `jail.local`**:
+# 
+#     2.1 Você deve fazer essa configuração no arquivo `jail.local`. Se ele não existir, crie uma cópia do `jail.conf` para `jail.local`: `sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local`
+# 
+#     2.2 **Agora edite o `jail.local`**: `sudo nano /etc/fail2ban/jail.local`
+# 
+# 3. **Adicione ou ajuste a configuração `ignoreip`**: No arquivo `jail.local`, dentro da seção `[DEFAULT]` ou na seção específica para a prisão `sshd`, adicione a linha `ignoreip` com o seu endereço IP. Se você quiser garantir que seu IP nunca será banido, adicione a configuração na seção [DEFAULT]:
+# 
+#     ```
+#     [DEFAULT]
+#     ignoreip = 127.0.0.1/8 ::1 192.168.37.244 192.168.37.213
+#     bantime = 10m
+#     findtime = 10m
+#     maxretry = 3
+#     ```
+# 
+#     Onde `SEU_IP` é o seu endereço IP (por exemplo, 192.168.1.100 ou o IP público, dependendo do que deseja proteger). Se quiser ignorar múltiplos IPs, você pode separá-los por espaços.
+# 
+# 4. **Reinicie o `Fail2Ban`**: Após adicionar a configuração, reinicie o `Fail2Ban` para aplicar as mudanças: `sudo systemctl restart fail2ban`
+# 
+# 5. **Verifique a configuração**: Para garantir que a configuração foi aplicada corretamente, verifique o _status_ do `Fail2Ban` e se ele está ignorando seu IP: `sudo fail2ban-client status sshd`
+# 
+# **Como funciona**:
+# 
+# -**`ignoreip`**: Define uma lista de endereços IP que o `Fail2Ban` nunca banirá. Isso inclui o seu próprio IP ou qualquer outro IP que você deseja proteger.
+# 
+# -**`bantime`**: Define o tempo de banimento para os IPs que falharem repetidamente nas tentativas de _login_.
+# 
+# -**`findtime`**: Define o intervalo de tempo dentro do qual as tentativas de _login_ falhas serão contadas.
+# 
+# -**`maxretry`**: Define o número máximo de tentativas falhas antes de banir um IP.
+# 
+
 # ### 1.2 Código completo para configurar/instalar/usar
 # 
 # Para configurar/instalar/usar o `fail2ban` no `Linux Ubuntu` sem precisar digitar linha por linha, você pode seguir estas etapas:
