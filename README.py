@@ -169,7 +169,7 @@
 # - Para desbanir um IP, use `sudo fail2ban-client set <nome-da-prisao> unbanip <endereço-ip>`.
 # 
 
-# ### Configurar o `Fail2Ban` para banir todos os OPs, exceto o seu
+# ### Configurar o `Fail2Ban` para banir todos os IPs, exceto o seu
 # 
 # 1. **Identifique o seu IP**:
 # 
@@ -236,6 +236,42 @@
 #     sudo systemctl status fail2ban
 #     ```
 #     
+
+# ## 2. Como desinstalar o `fail2ban`
+# 
+# Para desinstalar o `Fail2Ban` no seu sistema, siga as instruções abaixo, dependendo da distribuição que você está usando:
+# 
+# 1. **Desinstalar no Ubuntu/Debian**: Use o comando abaixo para remover o `Fail2Ban`:
+# 
+#     ```
+#     sudo apt remove --purge fail2ban -y
+#     ```
+# 
+#     Este comando irá remover o `Fail2Ba`n e limpar as configurações associadas.
+#     
+# 2. Caso deseje remover também pacotes dependentes que não estão mais em uso, execute:
+# 
+#     ```
+#     sudo apt autoremove -y
+#     ```
+# 
+# 3. **Verificar se foi Removido**: Você pode confirmar se o `Fail2Ban` foi desinstalado corretamente verificando o _status_ do serviço:
+# 
+#     ```
+#     sudo systemctl status fail2ban
+#     ```
+# 
+# Este comando deve retornar algo como `"Unit fail2ban.service could not be found"`, indicando que o serviço foi removido.
+# 
+# 4. **Remover Arquivos Residuais**: Se houverem arquivos residuais de configuração, como os arquivos `jail.local` que foram editados, você pode removê-los manualmente:
+# 
+#     ```
+#     sudo rm -rf /etc/fail2ban
+#     ```
+# 
+# Isso vai garantir que todos os arquivos de configuração que você modificou ou criou sejam excluídos.
+# 
+# Após esses passos, o Fail2Ban estará totalmente desinstalado do seu sistema.
 
 # ## Referências
 # 
