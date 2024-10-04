@@ -12,7 +12,8 @@ _In this document are contained the main commands and settings to set up/install
 
 ### `fail2ban`
 
-O `Fail2ban` é uma ferramenta de segurança para sistemas baseados em `Linux` que protege contra ataques de força bruta e tentativas de intrusão. Ele monitora os logs do sistema em busca de padrões de comportamento suspeitos, como tentativas repetidas e falhas de login, e bloqueia automaticamente os endereços IP associados a essas atividades por um período determinado. Isso ajuda a proteger o sistema contra ataques de hackers e garante uma maior segurança ao restringir o acesso de potenciais invasores.
+O `Fail2ban` é uma ferramenta de segurança para sistemas baseados em `Linux` que protege contra ataques de força bruta e tentativas de intrusão. Ele monitora os _logs_ do sistema em busca de padrões de comportamento suspeitos, como tentativas repetidas e falhas de login, e bloqueia automaticamente os endereços IP associados a essas atividades por um período determinado. Isso ajuda a proteger o sistema contra ataques de hackers e garante uma maior segurança ao restringir o acesso de potenciais invasores.
+
 
 ## 1. Como configurar/instalar/usar o `fail2ban` no `Linux Ubuntu` [1][3]
 
@@ -227,9 +228,8 @@ Para configurar/instalar/usar o `fail2ban` no `Linux Ubuntu` sem precisar digita
     sudo apt list --upgradable
     sudo apt full-upgrade -y
     sudo apt install fail2ban -y
-    sudo systemctl status fail2ban
-    sudo systemctl start fail2ban
     sudo systemctl enable fail2ban
+    sudo systemctl start fail2ban
     sudo systemctl status fail2ban
     ```
     
