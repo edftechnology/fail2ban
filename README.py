@@ -121,17 +121,33 @@
 # 
 # Depois de configurar o `fail2ban` e o Postfix, você pode testar se as notificações por _e-mail_ estão funcionando corretamente. Você pode forçar um banimento manualmente ou realizar uma ação que dispare um banimento para testar se o `fail2ban` envia o _e-mail_.
 # 
-# 1. Agora, o `Fail2Ban` deve enviar notificações por _e-mail_ sempre que um IP for banido. Para testar, você pode forçar um banimento manualmente: `sudo fail2ban-client set sshd banip 127.0.0.2`
+# 1. Agora, o `Fail2Ban` deve enviar notificações por _e-mail_ sempre que um IP for banido. Para testar, você pode forçar um banimento manualmente:
+# 
+#     ```
+#     sudo fail2ban-client set sshd banip 127.0.0.2
+#     ```
 # 
 #     Verifique se você recebeu um _e-mail_ com as informações do banimento no endereço configurado.
 # 
-# 2. **Verificar se o IP foi banido**: Após executar o comando, você pode verificar se o IP foi banido com o seguinte comando: `sudo fail2ban-client status sshd`
+# 2. **Verificar se o IP foi banido**: Após executar o comando, você pode verificar se o IP foi banido com o seguinte comando:
+# 
+#     ```
+#     sudo fail2ban-client status sshd
+#     ```
 # 
 #     Isso listará o número de IPs banidos e o próprio IP banido.
 # 
-# 3. **Reiniciar o `fail2ban`:** Não se esqueça de reiniciar o serviço `fail2ban` após fazer alterações nas configurações: `sudo systemctl restart fail2ban`
+# 3. **Reiniciar o `fail2ban`:** Não se esqueça de reiniciar o serviço `fail2ban` após fazer alterações nas configurações:
 # 
-# 4. **Verifique o _status_ do serviço:** Após tentar reiniciar, verifique o _status_ novamente para ver se o serviço está rodando: `sudo systemctl status fail2ban`
+#     ```
+#     sudo systemctl restart fail2ban
+#     ```
+# 
+# 4. **Verifique o _status_ do serviço:** Após tentar reiniciar, verifique o _status_ novamente para ver se o serviço está rodando:
+# 
+#     ```
+#     sudo systemctl status fail2ban
+#     ```
 # 
 # Com essas configurações, o `fail2ban` enviará automaticamente um _e-mail_ de notificação sempre que realizar uma ação de banimento, sem a necessidade de um _script_ adicional ou configurações do `cron`. Isso torna o `fail2ban` uma ferramenta poderosa e conveniente para monitorar a segurança do seu servidor em tempo real.
 # 
@@ -140,9 +156,17 @@
 # 
 # ### 2.1 Banir um IP manualmente
 # 
-# 1. Se você quiser banir manualmente um endereço IP específico usando o `Fail2Ban`, o comando que você usaria é: `sudo fail2ban-client set <nome-da-prisao> banip <endereço-ip>`
+# 1. Se você quiser banir manualmente um endereço IP específico usando o `Fail2Ban`, o comando que você usaria é:
 # 
-#     **Exemplo**: Se você quiser banir o IP `192.168.1.100` na prisão `sshd` (usada para monitorar o SSH), o comando seria: `sudo fail2ban-client set sshd banip 192.168.1.100`
+#     ```
+#     sudo fail2ban-client set <nome-da-prisao> banip <endereço-ip>
+#     ```
+# 
+#     **Exemplo**: Se você quiser banir o IP `192.168.1.100` na prisão `sshd` (usada para monitorar o SSH), o comando seria:
+#     
+#     ```
+#     sudo fail2ban-client set sshd banip 192.168.1.100
+#     ```
 # 
 #     **Explicação**:
 # 
@@ -150,7 +174,11 @@
 # 
 #     - **<endereço-ip>**: O endereço IP que você quer banir. Exemplo: `192.168.1.100`.
 # 
-# 2. **Verificar se o IP foi banido**: Após executar o comando, você pode verificar se o IP foi banido com o seguinte comando: `sudo fail2ban-client status sshd`
+# 2. **Verificar se o IP foi banido**: Após executar o comando, você pode verificar se o IP foi banido com o seguinte comando:
+# 
+#     ```
+#     sudo fail2ban-client status sshd
+#     ```
 # 
 #     Isso listará o número de IPs banidos e o próprio IP banido.
 # 
@@ -213,7 +241,7 @@
 # -**`maxretry`**: Define o número máximo de tentativas falhas antes de banir um IP.
 # 
 
-# ### 1.2 Código completo para configurar/instalar/usar
+# ## 1.2. Código completo para configurar/instalar/usar
 # 
 # Para configurar/instalar/usar o `fail2ban` no `Linux Ubuntu` sem precisar digitar linha por linha, você pode seguir estas etapas:
 # 
@@ -237,7 +265,166 @@
 #     ```
 #     
 
-# ## 2. Como desinstalar o `fail2ban`
+# ## 2. Notificação de acesso pelo `Telegram`
+# 
+# ### 2.1 Obter um token do _bot_ do `Telegram`
+# 
+# 1. **Abrir o `Telegram` e Procurar por `@BotFather`**:
+# 
+#     1.1 Abra o aplicativo `Telegram` no seu celular ou no _desktop_.
+# 
+#     1.2 Na barra de busca, digite `@BotFather` e abra a conversa com ele. O @`BotFather` é um _bot_ oficial do `Telegram` responsável pela criação e gerenciamento de outros _bots_.
+# 
+# 2. **Criar um Novo Bot**:
+# 
+#     2.1 Envie o comando `/newbot` para o `@BotFather`.
+# 
+#     2.2 Ele vai te pedir um nome para o _bot_. Este nome pode ser qualquer coisa, como `"MeuBotDeNotificacoes"`.
+# 
+#     2.3 Em seguida, ele vai te pedir um `username` para o _bot_. Este nome deve ser único e terminar em `"bot"`. Por exemplo, `meubotdenotificacoes_bot`.
+# 
+# 3. **Receber o Token do _Bot_**:
+# 
+#     3.1 Assim que o _bot_ for criado, o `@BotFather` fornecerá uma mensagem contendo um _token_ de acesso. Este _token_ é um identificador exclusivo que você usará para enviar mensagens usando a API do `Telegram`.
+# 
+#     3.2 O _token_ terá um formato parecido com:
+# 
+#     ```
+#     7550358484:AAHQ8KRYfbQ1r7ZV7FgbsmDub3Ypnd0xcPM
+#     ```
+# 
+# 4. **Anotar o Token**:
+# 
+#     4.1 Copie e guarde esse _token_ com segurança, pois ele será necessário para enviar notificações a partir do bot que você acabou de criar.
+#     
+
+# ### 2.2 Obter o `chat_id` do Usuário ou Grupo
+# 
+# Além do token, você precisará do `chat_id`, que identifica para qual usuário ou grupo a mensagem deve ser enviada. Veja como obter isso:
+# 
+# 1. **Enviar uma Mensagem para o Bot**:
+# 
+#     1.1 Vá até o bot que você criou e clique em `"Iniciar"` para abrir a conversa.
+# 
+#     1.2 Envie uma mensagem qualquer para o bot (por exemplo, `"Oi"`).
+# 
+# 2. **Obter o `chat_id`**:
+# 
+#     2.1 Para obter o `chat_id`, você pode usar a API do Telegram:
+# 
+#     2.1.2 Abra um navegador e acesse o seguinte link (substituindo 7550358484:AAHQ8KRYfbQ1r7ZV7FgbsmDub3Ypnd0xcPM pelo seu token):
+#     
+#     ```
+#     https://api.telegram.org/bot7550358484:AAHQ8KRYfbQ1r7ZV7FgbsmDub3Ypnd0xcPM/getUpdates
+#     ```
+# 
+#     2.1.3 Você verá um JSON de resposta contendo informações sobre as últimas mensagens enviadas ao bot. Procure pelo campo `"chat"`, que terá um `"id"`, este é o `chat_id` que você precisará usar:
+# 
+#     ```
+#     475891890
+#     ```
+# 
+# Com essas informações, você conseguirá configurar o bot do Telegram para enviar alertas sempre que houver uma tentativa de login não autorizada no seu servidor.
+
+# ### 2.3 Script de Notificação
+# 
+# Com o `token` e o `chat_id` em mãos, você pode criar o seguinte _script_ para enviar notificações ao `Telegram`:
+# 
+# #### 2.3.1 Utilizar o Diretório `/etc/secret`
+# 
+# Caso queira um nível extra de segurança, você pode salvar o arquivo de configuração em um diretório seguro, por exemplo, `/etc/secret`.
+# 
+# 1. Crie um diretório seguro:
+# 
+#     ```
+#     sudo mkdir /etc/secret
+#     sudo chmod 700 /etc/secret
+#     ```
+# 
+# 2. Crie o arquivo para armazenar os detalhes do bot:
+# 
+#     ```
+#     sudo nano /etc/secret/telegram_bot.conf
+#     ```
+# 
+# 3. Adicione `TOKEN` e `CHAT_ID`:
+# 
+#     ```
+#     #!/bin/bash
+#     TOKEN="7550358484:AAHQ8KRYfbQ1r7ZV7FgbsmDub3Ypnd0xcPM"
+#     CHAT_ID="475891890"
+#     MESSAGE="Tentativa de login detectada no servidor $(hostname) de IP $1"
+# 
+#     curl -s -X POST "https://api.telegram.org/bot$TOKEN/sendMessage" \
+#         -d chat_id=$CHAT_ID \
+#         -d text="$MESSAGE"
+#      ```
+# 
+# 4. Altere as permissões do arquivo para garantir que apenas usuários autorizados possam lê-lo:
+# 
+#     ```
+#     sudo chmod 600 /etc/secret/telegram_bot.conf
+#     ```
+# 
+# 5. Depois, escrever _script_ do `Fail2Ban` conforme Seção a segui.
+
+# ### 2.4  Script do `Fail2Ban` para notificar pelo `Telegram`
+# 
+# Você deve colocar esse _script_ em um local onde possa ser executado pelo `Fail2Ban` ou pela aplicação responsável por monitorar as tentativas de _login_. Uma boa prática é salvá-lo em um diretório como `/usr/local/bin/` ou outro diretório acessível para _scripts_ executáveis.
+# 
+# 1. Crie o script no diretório adequado:
+# 
+#     ```
+#     sudo nano /usr/local/bin/telegram_notify.sh
+#     ```
+# 
+# 2. Cole o conteúdo do _script_:
+# 
+#     ```
+#     #!/bin/bash
+#     source /etc/secret/telegram_bot.conf
+# 
+#     MESSAGE="Login attempt on server $(hostname) of IP $1"
+# 
+#     curl -s -X POST "https://api.telegram.org/bot$TOKEN/sendMessage" \
+#         -d chat_id=$CHAT_ID \
+#         -d text="$MESSAGE"
+#     ```
+# 
+# 3. Torne o _script_ executável:
+# 
+#     ```
+#     sudo chmod +x /usr/local/bin/telegram_notify.sh
+#     ```
+# 
+# 4. Testar para verificar se **NÃO** há nenhum problema e se todos os acessos estão corretos. Execute no `Terminal Emulator`:
+# 
+#     ```
+#     !/bin/bash
+# 
+#     # Carregar as variáveis do arquivo de configuração
+#     source /etc/secret/telegram_bot.conf
+# 
+#     # Mensagem de teste
+#     MESSAGE="Tentativa de login detectada no servidor $(hostname) de IP $1"
+# 
+#     # Exibir mensagem para garantir que as variáveis foram carregadas
+#     echo "TOKEN: $TOKEN"
+#     echo "CHAT_ID: $CHAT_ID"
+#     echo "MESSAGE: $MESSAGE"
+# 
+#     # Enviar a mensagem para o Telegram
+#     curl -s -X POST "https://api.telegram.org/bot$TOKEN/sendMessage" \
+#         -d chat_id=$CHAT_ID \
+#         -d text="$MESSAGE" -v
+#     ```
+# 
+# 5. Configure o `Fail2Ban` (ou outra aplicação) para acionar o _script_ `/usr/local/bin/telegram_notify.sh` quando houver uma tentativa de _login_.
+# 
+# Isso garantirá que o _script_ seja acionado automaticamente para enviar uma mensagem ao `Telegram` sempre que necessário.
+# 
+
+# ## 3. Como desinstalar o `fail2ban`
 # 
 # Para desinstalar o `Fail2Ban` no seu sistema, siga as instruções abaixo, dependendo da distribuição que você está usando:
 # 
@@ -271,7 +458,7 @@
 # 
 # Isso vai garantir que todos os arquivos de configuração que você modificou ou criou sejam excluídos.
 # 
-# Após esses passos, o Fail2Ban estará totalmente desinstalado do seu sistema.
+# Após esses passos, o `Fail2Ban` estará totalmente desinstalado do seu sistema.
 
 # ## Referências
 # 
