@@ -7,6 +7,9 @@
 [submodule "subs/submodules/git_scripts"]
 	path = subs/submodules/git_scripts
 	url = git@github.com:edftechnology/git_scripts.git
+[submodule "subs/submodules/python_scripts"]
+	path = subs/submodules/python_scripts
+	url = git@github.com:edftechnology/python_scripts.git
 [submodule "subs/submodules/markdown_scripts"]
 	path = subs/submodules/markdown_scripts
 	url = git@github.com:edftechnology/markdown_scripts.git
@@ -19,6 +22,3 @@
 [submodule ".vscode"]
 	path = .vscode
 	url = git@github.com:edftechnology/.vscode.git
-[submodule "subs/submodules/python_scripts"]
-	path = subs/submodules/python_scripts
-	url = git@github.com:edftechnology/python_scripts.git
